@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import mongoose, { Schema } from 'mongoose';
 import mongooseKeywords from 'mongoose-keywords';
 import { env } from '../../config';
+import { schema as bookSchema } from './../book/model';
 
 const roles = ['user', 'admin'];
 
@@ -34,6 +35,10 @@ const userSchema = new Schema(
     picture: {
       type: String,
       trim: true,
+    },
+    books: {
+      type: [bookSchema],
+      default: []
     },
   },
   {
@@ -72,7 +77,7 @@ userSchema.pre('save', function (next) {
 userSchema.methods = {
   view(full) {
     const view = {};
-    let fields = ['id', 'name', 'picture'];
+    let fields = ['id', 'name', 'picture', 'books'];
 
     if (full) {
       fields = [...fields, 'email', 'createdAt'];
