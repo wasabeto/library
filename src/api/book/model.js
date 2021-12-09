@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import mongooseKeywords from 'mongoose-keywords';
 
 const bookSchema = new Schema(
   {
@@ -17,14 +18,6 @@ const bookSchema = new Schema(
     },
     published: {
       type: Number,
-    },
-  },
-  {
-    toJSON: {
-      virtuals: true,
-      transform: (obj, ret) => {
-        delete ret._id;
-      },
     },
   }
 );
@@ -48,6 +41,8 @@ bookSchema.methods = {
       : view;
   },
 };
+
+bookSchema.plugin(mongooseKeywords, { paths: ['title', 'genre'] });
 
 const model = mongoose.model('Book', bookSchema);
 
